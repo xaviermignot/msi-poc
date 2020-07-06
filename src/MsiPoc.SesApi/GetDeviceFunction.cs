@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,38 +8,39 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace MsiPos.SesApi
+namespace MsiPoc.SesApi
 {
     public class GetDeviceFunction
     {
         private readonly HttpClient _httpClient;
+        private readonly DpsConfiguration _dpsConfiguration;
 
-        public GetDeviceFunction(HttpClient httpClient)
+        public GetDeviceFunction(HttpClient httpClient, IOptions<DpsConfiguration> dpsConfiguration)
         {
-            _httpClient = httpClient;    
+            _httpClient = httpClient;
+            _dpsConfiguration = dpsConfiguration.Value;
         }
 
         [FunctionName("GetDeviceFunction")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "devices/{id}")] 
+        public async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "devices/{id}")]
             HttpRequest req,
+            [FromRoute]
+            string id,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            var response = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, new Uri(_dpsConfiguration.BaseUri, $"devices/{id}")));
 
-            string name = req.Query["name"];
-
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
-
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
+            return response.StatusCode switch
+            {
+                HttpStatusCode.OK => new OkResult(),
+                HttpStatusCode.NotFound => new NotFoundResult(),
+                HttpStatusCode.RedirectKeepVerb => new RedirectResult(response.Headers.Location.ToString()),
+                _ => throw new NotSupportedException()
+            };
         }
     }
 }
