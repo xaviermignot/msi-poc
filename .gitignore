@@ -4,6 +4,9 @@
 # Azure Functions localsettings file
 local.settings.json
 
+# VS Code settings in root directory (contains secrets for Rest Client)
+.vscode/settings.json
+
 # User-specific files
 *.suo
 *.user

@@ -1,0 +1,24 @@
+@deviceId=DeviceA
+@environment=QA
+
+#--------------Initialize-------------##
+### Retrieve token from AD
+# @name auth
+POST https://login.microsoftonline.com/{{tenantId}}/oauth2/v2.0/token HTTP/1.1
+Content-type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+&client_id={{dpsClientId}}
+&client_secret={{dpsClientSecret}}
+&scope={{dpsScope}}
+
+###
+@token={{auth.response.body.access_token}}
+
+###
+HEAD {{dpsUrl}}/api/devices/{{deviceId}}?code={{dpsHostCode}}
+Authorization: Bearer {{token}}
+
+###
+PUT {{dpsUrl}}/api/devices/{{deviceId}}/redirect/{{environment}}?code={{dpsHostCode}}
+Authorization: Bearer {{token}}
