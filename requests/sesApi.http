@@ -1,3 +1,5 @@
+@deviceId=DeviceA
+
 #--------------Initialize-------------##
 ### Retrieve token from AD
 # @name auth
@@ -8,3 +10,10 @@ grant_type=client_credentials
 &client_id={{sesClientId}}
 &client_secret={{sesClientSecret}}
 &scope={{sesScope}}
+
+###
+@token={{auth.response.body.access_token}}
+
+###
+GET {{sesUrl}}/api/devices/{{deviceId}}?code={{sesHostCode}}
+Authorization: Bearer {{token}}
