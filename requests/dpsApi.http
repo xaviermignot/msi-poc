@@ -16,7 +16,7 @@ grant_type=client_credentials
 @token={{auth.response.body.access_token}}
 
 ###
-HEAD {{dpsUrl}}/api/devices/{{deviceId}}?code={{dpsHostCode}}
+GET {{dpsUrl}}/api/devices/{{deviceId}}?code={{dpsHostCode}}
 Authorization: Bearer {{token}}
 
 ###

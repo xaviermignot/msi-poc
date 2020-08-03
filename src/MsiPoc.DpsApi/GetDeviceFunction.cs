@@ -13,7 +13,7 @@ namespace MsiPoc.DpsApi
     {
         [FunctionName("GetDeviceFunction")]
         public static IActionResult Run(
-            [HttpTrigger(AuthorizationLevel.Function, "head", Route = "devices/{id}")]
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "devices/{id}")]
             HttpRequest req,
             [FromRoute]
             string id,

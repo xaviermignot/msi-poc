@@ -30,8 +30,7 @@ namespace MsiPoc.SesApi
             string id,
             ILogger log)
         {
-            var response = await _httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Head, new Uri(_dpsConfiguration.BaseUri, $"devices/{id}")));
-
+            var response = await _httpClient.GetAsync(new Uri(_dpsConfiguration.BaseUri, $"devices/{id}"));
             return response.StatusCode switch
             {
                 HttpStatusCode.OK => new OkResult(),
