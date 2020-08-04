@@ -17,4 +17,7 @@
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MsiPoc.Abstractions\MsiPoc.Abstractions.csproj" />
+  </ItemGroup>
 </Project>

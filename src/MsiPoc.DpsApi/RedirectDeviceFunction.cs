@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Net;
+using MsiPoc.Abstractions;
 
 namespace MsiPoc.DpsApi
 {

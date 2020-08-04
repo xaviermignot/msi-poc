@@ -1,28 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using MsiPoc.Abstractions;
 
 namespace MsiPoc.DpsApi
 {
-    public class Device
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public Redirection Redirection { get; set; }
-    }
-
-    public class Redirection
-    {
-        public HttpStatusCode Code { get; set; }
-        public Uri Endpoint { get; set; }
-    }
-
-    public class Environment
-    {
-        public string Name { get; set; }
-        public Uri Uri { get; set; }
-    }
-
     public static class Database
     {
         public static List<Device> Devices = new List<Device>
@@ -49,24 +31,24 @@ namespace MsiPoc.DpsApi
             }
         };
 
-        public static List<Environment> Environments = new List<Environment>
+        public static List<Abstractions.Environment> Environments = new List<Abstractions.Environment>
         {
-            new Environment
+            new Abstractions.Environment
             {
                 Name = "DEV",
                 Uri = new Uri("https://api-dev.dps.com")
             },
-            new Environment
+            new Abstractions.Environment
             {
                 Name = "QA",
                 Uri = new Uri("https://api-qa.dps.com")
             },
-            new Environment
+            new Abstractions.Environment
             {
                 Name = "PREPROD",
                 Uri = new Uri("https://api-preprod.dps.com")
             },
-            new Environment
+            new Abstractions.Environment
             {
                 Name = "PROD",
                 Uri = new Uri("https://api.dps.com")
